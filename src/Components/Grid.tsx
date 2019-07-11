@@ -25,12 +25,13 @@ export const Grid: React.FunctionComponent = () => {
                     border: '1px solid black',
                     boxSizing: 'content-box',
                     flexWrap: 'wrap',
-                    width: `calc(40px * ${grid.column})`,
+                    width: `calc(40px * ${grid.column})`
                 }}
             >
                 {grid.map((cell, index) => (
                     <Cell
                         key={index}
+                        index={index}
                         status={cell.status}
                         onclick={(ev: MouseEvent) =>
                             handleClick(index, ev.button)
