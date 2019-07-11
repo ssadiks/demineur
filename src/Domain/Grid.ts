@@ -6,6 +6,7 @@ export class Grid {
     [key: number]: number;
     private _column: number;
     private _cells: Cells;
+    public minesCount: number;
 
     static generate(row: number, column: number, minesCount: number): Grid {
         const length = row * column;
@@ -24,10 +25,10 @@ export class Grid {
             cells[index] = cell;
         }
 
-        return new Grid(column, cells);
+        return new Grid(column, cells, minesCount);
     }
 
-    constructor(column: number, cells: Cells) {
+    constructor(column: number, cells: Cells, minesCount: number) {
         if (!Number.isInteger(column)) {
             throw new TypeError('column count must be an integer');
         }
@@ -40,6 +41,7 @@ export class Grid {
 
         this._column = column;
         this._cells = cells;
+        this.minesCount = minesCount;
     }
 
     [Symbol.iterator]() {
@@ -66,7 +68,7 @@ export class Grid {
         const cell = cells[cellIndex];
 
         cells[cellIndex] = cell[action]();
-        return new Grid(this._column, cells);
+        return new Grid(this._column, cells, this.minesCount);
     }
 
     get column() {

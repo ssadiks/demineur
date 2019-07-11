@@ -3,20 +3,18 @@ import { Cell } from '../src/Domain/Cell';
 
 describe(Grid, () => {
     test('it needs to be filled', () => {
-        expect(() => new Grid(2, [])).toThrowError(RangeError);
+        expect(() => new Grid(2, [], 0)).toThrowError(RangeError);
     });
 
     describe('getByCoordinate', () => {
         test('it get the first cell in grid when asking for x:0 y:0', () => {
             const expected = Cell.withBomb();
             const unexpected = Cell.withoutBomb();
-            const grid = new Grid(5, [
-                expected,
-                unexpected,
-                unexpected,
-                unexpected,
-                unexpected,
-            ]);
+            const grid = new Grid(
+                5,
+                [expected, unexpected, unexpected, unexpected, unexpected],
+                1
+            );
 
             expect(grid.cellByCoodinates(0, 0)).toBe(expected);
         });
@@ -24,16 +22,20 @@ describe(Grid, () => {
         test('it get the last cell in grid when asking for x:3 y:1', () => {
             const expected = Cell.withBomb();
             const unexpected = Cell.withoutBomb();
-            const grid = new Grid(4, [
-                unexpected,
-                unexpected,
-                unexpected,
-                unexpected,
-                unexpected,
-                unexpected,
-                unexpected,
-                expected,
-            ]);
+            const grid = new Grid(
+                4,
+                [
+                    unexpected,
+                    unexpected,
+                    unexpected,
+                    unexpected,
+                    unexpected,
+                    unexpected,
+                    unexpected,
+                    expected
+                ],
+                1
+            );
 
             const cell = grid.cellByCoodinates(3, 1);
             expect(cell).toBe(expected);
