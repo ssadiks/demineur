@@ -1,5 +1,6 @@
 import { Grid } from '../src/Domain/Grid';
 import { Cell } from '../src/Domain/Cell';
+import { getCoordinates } from '../src/Components/Grid';
 
 describe(Grid, () => {
     test('it needs to be filled', () => {
@@ -87,6 +88,27 @@ describe(Grid, () => {
             }, 0);
 
             expect(mineCount).toBe(10);
+        });
+
+        test('it get number of adjacent cells with bombs', () => {
+            const grid = Grid.generate(row, column, 0);
+            iterator.forEach((_, index) => {
+                const cell = grid.cellByIndex(index);
+                if (cell) {
+                    const dugCell = cell.dig(2);
+                    expect(dugCell.adjacentCellsWithBombsCount).toBe(2);
+                }
+            });
+        });
+    });
+    describe('getCoordonates()', () => {
+        test('it get coordonates by index', () => {
+            expect(getCoordinates(0, 3)).toEqual({ x: 0, y: 0 });
+        });
+        test('it get coordonates by index', () => {
+            expect(() => {
+                getCoordinates(9, 3);
+            }).toThrowError('This cell is not in the grid');
         });
     });
 });

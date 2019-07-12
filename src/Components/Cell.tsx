@@ -5,13 +5,23 @@ type CellProps = {
     status: CellStatus;
     onclick: Function;
     index: number;
+    adjacentCellsWithBombsCount?: number;
 };
 
-const emojis = {
-    untouched: '',
-    dug: '',
-    flagged: '🚩',
-    detonated: '💥'
+export const getEmojis = (
+    status: CellStatus,
+    adjacentCellsWithBombsCount?: number
+) => {
+    const emojis = {
+        untouched: '',
+        dug: '',
+        flagged: '🚩',
+        detonated: '💥'
+    };
+    if (status === 'dug' && adjacentCellsWithBombsCount !== 0) {
+        return adjacentCellsWithBombsCount;
+    }
+    return emojis[status];
 };
 
 const getBackgroundColor = (status: CellStatus): string => {
@@ -38,19 +48,20 @@ const cellStyle = (status: CellStatus): React.CSSProperties => ({
 });
 
 export const Cell: React.FunctionComponent<CellProps> = props => {
+    const { status, adjacentCellsWithBombsCount, onclick } = props;
     return (
         <div
             onClick={ev => {
                 ev.preventDefault();
-                props.onclick(ev);
+                onclick(ev);
             }}
             onContextMenu={ev => {
                 ev.preventDefault();
-                props.onclick(ev);
+                onclick(ev);
             }}
-            style={cellStyle(props.status)}
+            style={cellStyle(status)}
         >
-            {emojis[props.status]}
+            {getEmojis(status, adjacentCellsWithBombsCount)}
         </div>
     );
 };

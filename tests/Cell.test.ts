@@ -1,4 +1,5 @@
 import { Cell } from '../src/Domain/Cell';
+import { getEmojis } from '../src/Components/Cell';
 
 describe(Cell, () => {
     describe('without a bomb', () => {
@@ -43,6 +44,15 @@ describe(Cell, () => {
         test('blows player face when he dig this cell', () => {
             const dugTrappedCell = trappedCell.dig();
             expect(dugTrappedCell.detonated).toBe(true);
+        });
+    });
+
+    describe('getEmojis()', () => {
+        test('should get the number of bombs around', () => {
+            expect(getEmojis('dug', 1)).toBe(1);
+        });
+        test('should get a flag', () => {
+            expect(getEmojis('flagged')).toBe('🚩');
         });
     });
 });

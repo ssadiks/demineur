@@ -4,7 +4,7 @@ export type Cells = Array<Cell>;
 
 export class Grid {
     [key: number]: number;
-    private _column: number;
+    public _column: number;
     private _cells: Cells;
     public minesCount: number;
 
@@ -67,7 +67,8 @@ export class Grid {
         const cells = [...this._cells];
         const cell = cells[cellIndex];
 
-        cells[cellIndex] = cell[action]();
+        const { name, adjacentCellsWithBombsCount } = action;
+        cells[cellIndex] = cell[name](adjacentCellsWithBombsCount);
         return new Grid(this._column, cells, this.minesCount);
     }
 

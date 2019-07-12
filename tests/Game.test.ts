@@ -15,7 +15,10 @@ describe('Rules', () => {
         expect(isDefeated(grid)).toBe(false);
         expect(isVictorious(grid)).toBe(false);
 
-        const gridDetonated = grid.sendActionToCell(0, 'dig');
+        const gridDetonated = grid.sendActionToCell(0, {
+            name: 'dig',
+            adjacentCellsWithBombsCount: 0
+        });
 
         expect(isDefeated(gridDetonated)).toBe(true);
         expect(isVictorious(gridDetonated)).toBe(false);
@@ -27,12 +30,18 @@ describe('Rules', () => {
         expect(isDefeated(grid)).toBe(false);
         expect(isVictorious(grid)).toBe(false);
 
-        const gridFlagged = grid.sendActionToCell(0, 'flag');
+        const gridFlagged = grid.sendActionToCell(0, {
+            name: 'flag',
+            adjacentCellsWithBombsCount: undefined
+        });
 
         expect(isDefeated(gridFlagged)).toBe(false);
         expect(isVictorious(gridFlagged)).toBe(false);
 
-        const gridDug = grid.sendActionToCell(0, 'dig');
+        const gridDug = grid.sendActionToCell(0, {
+            name: 'dig',
+            adjacentCellsWithBombsCount: 0
+        });
 
         expect(isDefeated(gridDug)).toBe(false);
         expect(isVictorious(gridDug)).toBe(true);
