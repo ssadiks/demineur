@@ -7,7 +7,7 @@ export type CellAction = {
 export class Cell {
     public _bomb: boolean;
     private _flagged: boolean;
-    private _dug: boolean;
+    public _dug: boolean;
     public adjacentCellsWithBombsCount?: number;
 
     static withBomb(): Cell {

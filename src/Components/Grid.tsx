@@ -5,7 +5,7 @@ import { Game } from './Game';
 import { Cells } from '../Domain/Grid';
 import { isDefeated, isVictorious } from '../Domain/Rules';
 
-export const getCoordinates = (
+export const getCoordinatesByIndex = (
     index: number,
     columnsCount: number
 ): { x: number; y: number } => {
@@ -17,6 +17,13 @@ export const getCoordinates = (
     return { x, y };
 };
 
+export const getIndexByCoordinates = (
+    x: number,
+    y: number,
+    columnsCount: number
+) => {
+    return columnsCount * y + x;
+};
 export const Grid: React.FunctionComponent = () => {
     const { grid, updateGridCellStatus } = React.useContext(GameContext);
     const columnsCount = grid._column;
@@ -40,45 +47,89 @@ export const Grid: React.FunctionComponent = () => {
         index: number,
         columnsCount: number
     ): number => {
-        const { x, y } = getCoordinates(index, columnsCount);
+        const { x, y } = getCoordinatesByIndex(index, columnsCount);
         const adjacentCells = getAdjacentCells(x, y);
-        return adjacentCells.filter(cell => cell._bomb == true).length;
+        const adjacentCellsWithBombsCount = adjacentCells.filter(
+            cell => cell.infos._bomb == true
+        ).length;
+        console.log('adjacentCellsWithBombsCount', adjacentCellsWithBombsCount);
+        if (adjacentCellsWithBombsCount === 0) {
+            console.log('zero', adjacentCells);
+            adjacentCells.map(cell => {
+                const { x, y } = cell.coordo;
+                const indexAdjacentCell = getIndexByCoordinates(
+                    x,
+                    y,
+                    columnsCount
+                );
+                const cellule = grid.cellByIndex(indexAdjacentCell);
+                console.log('indexx', indexAdjacentCell);
+                console.log('ADJ', getAdjacentCells(x, y));
+                /*updateGridCellStatus(indexAdjacentCell, {
+                        name: 'dig',
+                        adjacentCellsWithBombsCount: getAdjacentCellsWithBombsCount(
+                            indexAdjacentCell,
+                            columnsCount
+                        )
+                    });*/
+                // handleClick(indexAdjacentCell, 0);
+            });
+        }
+        return adjacentCells.filter(cell => cell.infos._bomb == true).length;
     };
 
     const getAdjacentCells = (x: number, y: number) => {
-        let adj: Cells = [];
+        let adj = [];
         if (x > 0) {
             const cell = grid.cellByCoodinates(x - 1, y);
-            cell && adj.push(cell);
+            console.log('cell dug', cell);
+            cell &&
+                !cell._dug &&
+                adj.push({ infos: cell, coordo: { x: x - 1, y } });
         }
         if (x < columnsCount - 1) {
             const cell = grid.cellByCoodinates(x + 1, y);
-            cell && adj.push(cell);
+            cell &&
+                !cell._dug &&
+                adj.push({ infos: cell, coordo: { x: x + 1, y } });
         }
         if (y > 0) {
             const cell = grid.cellByCoodinates(x, y - 1);
-            cell && adj.push(cell);
+            cell &&
+                !cell._dug &&
+                adj.push({ infos: cell, coordo: { x, y: y - 1 } });
         }
         if (y < columnsCount - 1) {
             const cell = grid.cellByCoodinates(x, y + 1);
-            cell && adj.push(cell);
+            cell &&
+                !cell._dug &&
+                adj.push({ infos: cell, coordo: { x, y: y + 1 } });
         }
         if (x > 0 && y > 0) {
             const cell = grid.cellByCoodinates(x - 1, y - 1);
-            cell && adj.push(cell);
+            cell &&
+                !cell._dug &&
+                adj.push({ infos: cell, coordo: { x: x - 1, y: y - 1 } });
         }
         if (x > 0 && y < columnsCount - 1) {
             const cell = grid.cellByCoodinates(x - 1, y + 1);
-            cell && adj.push(cell);
+            cell &&
+                !cell._dug &&
+                adj.push({ infos: cell, coordo: { x: x - 1, y: y + 1 } });
         }
         if (x < columnsCount - 1 && y < columnsCount - 1) {
             const cell = grid.cellByCoodinates(x + 1, y + 1);
-            cell && adj.push(cell);
+            cell &&
+                !cell._dug &&
+                adj.push({ infos: cell, coordo: { x: x + 1, y: y + 1 } });
         }
         if (x < columnsCount - 1 && y > 0) {
             const cell = grid.cellByCoodinates(x + 1, y - 1);
-            cell && adj.push(cell);
+            cell &&
+                !cell._dug &&
+                adj.push({ infos: cell, coordo: { x: x + 1, y: y - 1 } });
         }
+
         return adj;
     };
 

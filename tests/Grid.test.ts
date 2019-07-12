@@ -1,6 +1,6 @@
 import { Grid } from '../src/Domain/Grid';
 import { Cell } from '../src/Domain/Cell';
-import { getCoordinates } from '../src/Components/Grid';
+import { getCoordinatesByIndex } from '../src/Components/Grid';
 
 describe(Grid, () => {
     test('it needs to be filled', () => {
@@ -103,11 +103,11 @@ describe(Grid, () => {
     });
     describe('getCoordonates()', () => {
         test('it get coordonates by index', () => {
-            expect(getCoordinates(0, 3)).toEqual({ x: 0, y: 0 });
+            expect(getCoordinatesByIndex(0, 3)).toEqual({ x: 0, y: 0 });
         });
         test('it get coordonates by index', () => {
             expect(() => {
-                getCoordinates(9, 3);
+                getCoordinatesByIndex(9, 3);
             }).toThrowError('This cell is not in the grid');
         });
     });
